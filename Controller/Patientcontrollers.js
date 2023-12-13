@@ -55,3 +55,120 @@ exports.loginPatient = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+exports.getPatientProfile = async (req, res) => {
+  try {
+    // Use req.patientId to fetch the patient profile
+    const patient = await Patient.findById(req.patientId).select('-password');
+
+    if (!patient) {
+      return res.status(404).json({ error: 'Patient not found' });
+    }
+
+    res.json(patient);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+exports.updatePatientProfile = async (req, res) => {
+  try {
+    const {
+      fullName,
+      age,
+      weight,
+      height,
+      gender,
+      phoneNumber,
+      address,
+    } = req.body;
+
+    const updatedPatient = await Patient.findByIdAndUpdate(
+      req.patientId, // req.patientId to identify the patient
+      {
+        fullName,
+        age,
+        weight,
+        height,
+        gender,
+        phoneNumber,
+        address,
+      },
+      { new: true, select: '-password' }
+    );
+
+    if (!updatedPatient) {
+      return res.status(404).json({ error: 'Patient not found' });
+    }
+
+    res.json(updatedPatient);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+exports.getPatientMedicalHistory = async (req, res) => {
+  try {
+    const patient = await Patient.findById(req.patientId).select('medicalHistory');
+
+    if (!patient) {
+      return res.status(404).json({ error: 'Patient not found' });
+    }
+
+    res.json(patient.medicalHistory);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+exports.updatePatientMedicalHistory = async (req, res) => {
+  try {
+    const { allergies, medications, conditions, bloodtype } = req.body;
+
+    const updatedPatient = await Patient.findByIdAndUpdate(
+      req.patientId,
+      {
+        'medicalHistory.allergies': allergies,
+        'medicalHistory.medications': medications,
+        'medicalHistory.conditions': conditions,
+        'medicalHistory.bloodtype': bloodtype,
+      },
+      { new: true, select: 'medicalHistory' }
+    );
+
+    if (!updatedPatient) {
+      return res.status(404).json({ error: 'Patient not found' });
+    }
+
+    res.json(updatedPatient.medicalHistory);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+exports.deletePatientProfile = async (req, res) => {
+  try {
+    // Check if the provided confirmation matches
+    const { confirmation } = req.body;
+
+    if (confirmation !== 'CONFIRM_DELETE') {
+      return res.status(400).json({ error: 'Invalid confirmation' });
+    }
+
+    // Find the patient by ID and remove them from the database
+    const deletedPatient = await Patient.findByIdAndDelete(req.patientId);
+
+    if (!deletedPatient) {
+      return res.status(404).json({ error: 'Patient not found' });
+    }
+
+    res.json({ message: 'Patient profile deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};

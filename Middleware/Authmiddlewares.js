@@ -5,23 +5,26 @@ dotenv.config();
 
 const authenticatePatient = (req, res, next) => {
   // Get the token from the request headers
-  const token = req.header('Authorization');
+  const tokenHeader = req.header('Authorization');
 
-  if (!token) {
+  if (!tokenHeader) {
     return res.status(401).json({ error: 'Unauthorized - Missing token' });
   }
+
+  // Remove the "Bearer " prefix
+  const token = tokenHeader.replace('Bearer ', '');
 
   try {
     // Verify the token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // Attach the decoded payload to the request for further use
-    req.patient = decoded.patient;
+    req.patientId = decoded.patientId; // Access patientId directly
 
     // Continue to the next middleware or route handler
     next();
   } catch (error) {
-    console.error(error);
+    console.error('JWT Verification Error:', error);
     return res.status(401).json({ error: 'Unauthorized - Invalid token' });
   }
 };

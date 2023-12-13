@@ -5,6 +5,19 @@ const patientSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  fullName: { type: String },
+  age: { type: String },
+  weight: { type: String },
+  height: { type: String },
+  gender: { type: String },
+  phoneNumber: { type: String },
+  address: { type: String },
+  medicalHistory: {
+    allergies: { type: String },
+    medications: { type: String },
+    conditions: { type: String },
+    bloodtype: { type: String },
+  },
 });
 
 // Hash the password before saving to the database

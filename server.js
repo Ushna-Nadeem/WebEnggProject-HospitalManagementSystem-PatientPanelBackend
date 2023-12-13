@@ -26,10 +26,9 @@ db.once('open', () => {
 });
 
 // Middleware
-app.use(express.json());
-
-// CORS middleware
 app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // For handling form submissions
 
 // Routes
 app.use('/patients', patientRoutes);
