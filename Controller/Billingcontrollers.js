@@ -53,3 +53,53 @@ exports.viewPaidBills = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// Pay outstanding bills for a specific patient
+exports.payBills = async (req, res) => {
+    try {
+      const patientId = req.params.patientId;
+      const billIds = req.body.billIds;
+  
+      // Retrieve outstanding bills for the specified billIds and patient
+      const outstandingBills = await Billing.find({ _id: { $in: billIds }, patientId, isPaid: false });
+  
+      if (outstandingBills.length === 0) {
+        return res.status(404).json({ message: 'No outstanding bills found for the specified patient and billIds.' });
+      }
+  
+      // Calculate total outstanding amount
+      const totalAmount = outstandingBills.reduce((sum, bill) => sum + bill.amount, 0);
+  
+      // Extract payment type from the request body
+      const paymentType = req.body.paymentType;
+  
+      // Handle payment type-specific information
+      let paymentInfo;
+      if (paymentType === 'Online') {
+        // Extract online payment information
+        paymentInfo = req.body.onlinePaymentInfo;
+      } else if (paymentType === 'Card') {
+        // Extract card payment information
+        paymentInfo = req.body.cardPaymentInfo;
+      }
+  
+      // Update bills as paid and set payment information
+      await Billing.updateMany(
+        { _id: { $in: billIds }, patientId, isPaid: false },
+        {
+          $set: {
+            isPaid: true,
+            paymentType,
+            [`${paymentType.toLowerCase()}PaymentInfo`]: paymentInfo, // Dynamic property based on paymentType
+            paymentDate: new Date(),
+          },
+        }
+      );
+  
+      res.status(200).json({ message: 'Bills paid successfully!', totalAmount });
+    } catch (error) {
+      console.error('Error paying bills:', error);
+      res.status(500).json({ message: error.message });
+    }
+  };
+  

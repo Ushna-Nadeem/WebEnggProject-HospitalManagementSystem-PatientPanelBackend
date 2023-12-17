@@ -11,4 +11,7 @@ router.get('/outstanding/:patientId', billingController.viewOutstandingBills);
 // View paid bills for a specific patient
 router.get('/paid/:patientId', billingController.viewPaidBills);
 
+// Pay outstanding bills for a specific patient
+router.put('/payment/:patientId', billingController.payBills);
+
 module.exports = router;
