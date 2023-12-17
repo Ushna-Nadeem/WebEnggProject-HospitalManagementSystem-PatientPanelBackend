@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const patientRoutes = require('./Route/Patientroutes');
+const appointmentRoutes = require('./Route/Appointmentroutes');
 
 dotenv.config();
 
@@ -32,6 +33,7 @@ app.use(express.urlencoded({ extended: true })); // For handling form submission
 
 // Routes
 app.use('/patients', patientRoutes);
+app.use('/appointments', appointmentRoutes);
 
 // Start the server
 app.listen(port, () => {
