@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const patientRoutes = require('./Route/Patientroutes');
 const appointmentRoutes = require('./Route/Appointmentroutes');
+const prescriptionRoutes = require('./Route/Prescriptionroutes');
 
 dotenv.config();
 
@@ -34,6 +35,7 @@ app.use(express.urlencoded({ extended: true })); // For handling form submission
 // Routes
 app.use('/patients', patientRoutes);
 app.use('/appointments', appointmentRoutes);
+app.use('/prescriptions', prescriptionRoutes);
 
 // Start the server
 app.listen(port, () => {
