@@ -6,6 +6,7 @@ const patientRoutes = require('./Route/Patientroutes');
 const appointmentRoutes = require('./Route/Appointmentroutes');
 const prescriptionRoutes = require('./Route/Prescriptionroutes');
 const testResultRoutes = require('./Route/TestResultroutes');
+const billingRoutes = require('./Route/Billingroutes');
 
 dotenv.config();
 
@@ -38,6 +39,7 @@ app.use('/patients', patientRoutes);
 app.use('/appointments', appointmentRoutes);
 app.use('/prescriptions', prescriptionRoutes);
 app.use('/testresults', testResultRoutes);
+app.use('/bills', billingRoutes);
 
 // Start the server
 app.listen(port, () => {
