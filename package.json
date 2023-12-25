@@ -9,6 +9,7 @@
     "mongoose": "^8.0.3",
     "node": "^21.2.0",
     "nodemon": "^3.0.2",
+    "stripe": "^14.10.0",
     "uid": "^2.0.2"
   },
   "name": "webenggproject-hospitalmanagementsystem-patientpanel",

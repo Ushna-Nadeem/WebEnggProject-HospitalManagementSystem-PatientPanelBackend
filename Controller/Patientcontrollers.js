@@ -155,7 +155,7 @@ exports.deletePatientProfile = async (req, res) => {
     // Check if the provided confirmation matches
     const { confirmation } = req.body;
 
-    if (confirmation !== 'CONFIRM_DELETE') {
+    if (confirmation !== 'CONFIRM') {
       return res.status(400).json({ error: 'Invalid confirmation' });
     }
 

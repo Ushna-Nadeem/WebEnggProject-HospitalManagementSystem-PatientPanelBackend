@@ -24,40 +24,18 @@ const billingSchema = new mongoose.Schema({
   },
   paymentType: {
     type: String,
-    enum: ['Online', 'Card'],
+    enum: ['Online', 'Card', 'Stripe'],
     default: null,
-  },
-  paymentDate: {
-    type: Date,
-    default: null,
-  },
-  onlinePaymentInfo: {
-    paymentMethod: {
-      type: String,
-      enum: ['CreditCard', 'Other'],
-    },
-    cardNumber: String,
-    expirationDate: String,
-    cvv: String,
-    cardHolderName: String,
-    billingAddress: {
-      street: String,
-      city: String,
-      state: String,
-      zipCode: String,
-    },
   },
   cardPaymentInfo: {
-    cardNumber: String,
-    expirationDate: String,
-    cvv: String,
-    cardHolderName: String,
-    billingAddress: {
-      street: String,
-      city: String,
-      state: String,
-      zipCode: String,
-    },
+    paymentDate: Date,        // Payment date for card payments
+    cardLast4: String,        // Last 4 digits of the card
+    cardBrand: String,        // Card brand (Visa, MasterCard, etc.)
+    cardExpiryMonth: Number,  // Card expiration month
+    cardExpiryYear: Number,   // Card expiration year
+  },
+  stripePaymentInfo: {
+    paymentDate: Date,        // Payment date for stripe payments
   },
 });
 

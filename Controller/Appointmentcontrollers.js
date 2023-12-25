@@ -58,6 +58,28 @@ exports.viewAppointments = async (req, res) => {
   }
 };  
 
+exports.viewAppointmentsHistory = async (req, res) => {
+  try {
+    const patientId = req.params.patientId;
+
+    const query = {
+      patientId,
+      status: ['Completed', 'Cancelled']
+    };
+
+    const appointments = await Appointment.find(query);
+
+    if (appointments.length === 0) {
+      return res.status(404).json({ message: 'No appointment history found for the specified patient.' });
+    }
+
+    res.status(200).json(appointments);
+  } catch (error) {
+    console.error('Error retrieving appointments:', error);
+    res.status(500).json({ message: error.message });
+  }
+};  
+
 // Cancel an appointment
 exports.cancelAppointment = async (req, res) => {
     try {
