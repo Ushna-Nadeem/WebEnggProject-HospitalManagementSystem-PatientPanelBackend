@@ -1,3 +1,3 @@
-# WebEnggProject-HospitalManagementSystem-PatientPanel
+# WebEnggProject-HospitalManagementSystem-PatientPanelBackend
 
 # URL for published documentation: https://documenter.getpostman.com/view/31108532/2s9Ykt6f6Z
